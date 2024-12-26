@@ -104,6 +104,23 @@
   - The interface boxing nothing - the zero value of interface type (do not have dynamic type or value).
   - The method set of interface type of non-interface is wrapped the set of interface type. We say the type `implements` the interface type.
 
+## 17. Concept: concrete value and concrete type of value
+  - For non-interface type, concrete value it itself and the concrete type is type of value.
+  - The zero value of interface type neither concrete value nor concrete type.
+  - For non-zero interface value, its concrete value is dynamic value and concrete type is dynamic type.
+
+## 18. Concept: container type
+  - Can be `slice`, `map` or `array`, may be is `string` or `channel`.
+  - Have `length` property.
+
+## 19. Concept: elements of container type
+
+## 20. Concept: direction of channel type
+
+## 21. Fact: types which support or dont support comparisons
+  - slice, map, function
+  - struct or array with the element type is not comparable
+
 
 
 
