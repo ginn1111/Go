@@ -4,7 +4,7 @@ import "fmt"
 
 func main() {
 
-	var x = []interface{}{
+	var x = []any{
 		struct {
 			name string
 			age  int
