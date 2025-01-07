@@ -24,6 +24,6 @@
 
 ## 6. Validate JSON using `validator` pacakge
 
-## 7. `json.Decoder` vs `json.Unmarshal`
+## 7. `json.Decoder` and `json.Encoder` vs `json.Unmarshal` and `json.Marshal`
+  - `json.Decoder/Encoder` that operate on stream data, instead of JSON like `.json.Unmarshal/Marshal` 
 
-## 8. `json.Encoder` vs `json.Marshal`
