@@ -9,7 +9,8 @@ import (
 )
 
 type Timer struct {
-	Tick int
+	Tick  int
+	CStop chan bool
 }
 
 type Pomodoro struct {
@@ -19,8 +20,27 @@ type Pomodoro struct {
 	EndTime   time.Time
 }
 
-func Tick(t *Timer) {
-	t.Tick++
+func (t *Timer) Stops() {
+	t.CStop <- true
+}
+
+func (t *Timer) Ticks() {
+	go func() {
+		select {
+		case <-t.CStop:
+			return
+
+		case <-time.After(time.Second):
+			isClose := <-t.CStop
+			if isClose {
+				close(t.CStop)
+				return
+			}
+			t.Tick++
+			log.Println(t.Tick)
+			t.Ticks()
+		}
+	}()
 }
 
 func (p *Pomodoro) Start() {
@@ -44,7 +64,7 @@ func List() {
 		log.Fatal(err)
 	}
 
-	for _, dir := range dirs {
+	for i, dir := range dirs {
 		filepath, _ := filepath.Abs("assets/sections/" + dir.Name())
 		file, _ := os.Open(filepath)
 		dec := gob.NewDecoder(file)
@@ -53,6 +73,6 @@ func List() {
 
 		dec.Decode(&po)
 
+		log.Printf("Section %d: %s - %s -> total: %dm", i+1, po.StartTime.Format("02/01/2006 15:04"), po.EndTime.Format("02/01/2006 15:04"), int(po.EndTime.Sub(po.StartTime).Seconds()/60))
 	}
-
 }

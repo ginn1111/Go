@@ -20,8 +20,6 @@ func Save(pomodoro *models.Pomodoro) {
 		log.Fatal(err)
 	}
 
-	log.Println(newFilePath)
-
 	newFile, err := os.Create(newFilePath)
 	defer newFile.Close()
 

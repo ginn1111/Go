@@ -9,6 +9,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
+func stop() {
+	// get the started section and update the end time
+	// save to the file with the name is ID
+}
+
 // stopCmd represents the stop command
 var StopCmd = &cobra.Command{
 	Use:   "stop",

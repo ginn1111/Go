@@ -9,7 +9,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func startASection() {}
+func startASection() {
+	// create new pomodoro section
+	// start tick timer
+}
 
 // startCmd represents the start command
 var StartCmd = &cobra.Command{

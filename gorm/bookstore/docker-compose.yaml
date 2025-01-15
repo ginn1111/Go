@@ -1,0 +1,13 @@
+version: "3.3"
+
+services:
+  db:
+    user: 1000:1000
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - ~/dev/go/gorm/bookstore/assets/data:/var/lib/mysql
+    ports:
+      - 3306:3306
+    restart: always

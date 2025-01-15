@@ -5,10 +5,10 @@ package test
 
 import (
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/go/pomodoro/pomodoro/models"
-	"github.com/go/pomodoro/pomodoro/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -18,15 +18,29 @@ var TestCmd = &cobra.Command{
 	Short: "A brief description of your command",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		po := models.Pomodoro{
+		_ = models.Pomodoro{
 			ID:        123,
 			Minute:    30,
 			StartTime: time.Now(),
-			EndTime:   time.Now(),
+			EndTime:   time.Now().Add(time.Hour / 2),
 		}
 
-		utils.Save(&po)
-		models.List()
+		// utils.Save(&po)
+		// models.List()
+		timer := models.Timer{
+			CStop: make(chan bool, 1),
+		}
+		timer.Ticks()
+
+		go func() {
+			time.Sleep(time.Second * 3)
+			log.Println("Stop")
+			timer.Stops()
+		}()
+
+		for _ = range timer.CStop {
+		}
+
 		fmt.Println("test called")
 	},
 }
