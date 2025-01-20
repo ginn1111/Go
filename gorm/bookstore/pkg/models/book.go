@@ -1,6 +1,8 @@
 package models
 
 import (
+	"log"
+
 	"github.com/go/gorm/bookstore/pkg/config"
 	"github.com/jinzhu/gorm"
 )
@@ -12,6 +14,10 @@ type Book struct {
 	Name        string `gorm:""json:"name"`
 	Author      string `json:"author"`
 	Publication string `json:"publication"`
+}
+
+func (Book) TableName() string {
+	return "books"
 }
 
 func init() {
@@ -49,6 +55,23 @@ func DeleteBookById(bookId int64) Book {
 }
 
 // my implementation
-func UpdateBookById(bookId int64, book *Book) {
-	db.Where("ID=?", bookId).Update(book)
+func UpdateBookById(bookId uint, book *Book) {
+	updatingBook := Book{}
+	updatingBook.ID = bookId
+
+	db.First(&updatingBook)
+
+	if book.Author != "" {
+		updatingBook.Author = book.Author
+	}
+	if book.Name != "" {
+		updatingBook.Name = book.Name
+	}
+	if book.Publication != "" {
+		updatingBook.Publication = book.Publication
+	}
+
+	log.Println(updatingBook.ID, bookId)
+
+	db.Save(&updatingBook)
 }

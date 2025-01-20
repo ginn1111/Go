@@ -7,7 +7,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
     volumes:
-      - ~/dev/go/gorm/bookstore/assets/data:/var/lib/mysql
+      - ~/dev/Go/gorm/bookstore/assets/data:/var/lib/mysql
     ports:
       - 3306:3306
     restart: always

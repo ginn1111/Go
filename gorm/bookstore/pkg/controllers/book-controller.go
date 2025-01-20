@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -75,7 +76,7 @@ func UpdateBookById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	models.UpdateBookById(bookId, &updatingBook)
+	models.UpdateBookById(uint(bookId), &updatingBook)
 
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("ok"))
@@ -102,6 +103,8 @@ func DeleteBookById(w http.ResponseWriter, r *http.Request) {
 func CreateBook(w http.ResponseWriter, r *http.Request) {
 	var newBook models.Book
 	err := utils.ParseBody(r, &newBook)
+
+	fmt.Println(newBook)
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
