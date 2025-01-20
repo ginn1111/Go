@@ -1,13 +1,28 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"github.com/go/go-goinc/controller"
+	"github.com/go/go-goinc/service"
+)
+
+var (
+	videoService    service.VideoService       = service.New()
+	videoController controller.VideoController = controller.New(videoService)
+)
 
 func main() {
 	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
+
+	r.GET("/videos", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, videoController.FindAll())
 	})
-	r.Run() // listen and serve on 0.0.0.0:8080
+
+	r.POST("/video", func(ctx *gin.Context) {
+		videoController.Save(ctx)
+	})
+
+	r.Run(":8080") // listen and serve on 0.0.0.0:8080
 }
