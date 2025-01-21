@@ -10,7 +10,6 @@ import (
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
 	"github.com/go/go-goinc/controller"
-	"github.com/go/go-goinc/entity"
 	"github.com/go/go-goinc/middlewares"
 	"github.com/go/go-goinc/service"
 )
@@ -50,27 +49,32 @@ func main() {
 
 	r.Use(gin.Recovery(), middlewares.Logger(), middlewares.BasicAuth())
 
-	r.GET("/videos", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, videoController.FindAll())
-	})
+	r.Static("/css", "./template/css")
+	r.LoadHTMLGlob("template/*.html")
 
-	r.POST("/video", func(ctx *gin.Context) {
-		if err := videoController.Save(ctx); err != nil {
-			ctx.JSON(http.StatusBadRequest, err.Error())
-		} else {
+	apiRoutes := r.Group("/api")
+	{
 
-			ctx.JSON(http.StatusOK, videoController.Save(ctx))
-		}
-	})
+		apiRoutes.GET("/videos", func(ctx *gin.Context) {
+			ctx.JSON(http.StatusOK, videoController.FindAll())
+		})
 
-	// test biding with uri
-	r.PUT("/video/:id", func(ctx *gin.Context) {
-		var video entity.Video
+		apiRoutes.POST("/video", func(ctx *gin.Context) {
+			if err := videoController.Save(ctx); err != nil {
+				ctx.JSON(http.StatusBadRequest, err.Error())
+			} else {
 
-		ctx.ShouldBindUri(&video)
+				ctx.JSON(http.StatusOK, videoController.Save(ctx))
+			}
+		})
+	}
 
-		ctx.JSON(http.StatusOK, video)
-	})
+	viewRoutes := r.Group("/view")
+	{
+		viewRoutes.GET("/videos", func(ctx *gin.Context) {
+			videoController.ShowAll(ctx)
+		})
+	}
 
 	r.Run(":8080") // listen and serve on 0.0.0.0:8080
 }

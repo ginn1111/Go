@@ -1,0 +1,20 @@
+  {{template "header.html"}}
+
+    <ul class="videos">
+      {{range .videos}}
+      <li class="video">
+        <h1>{{.Title}}</h1>
+        <iframe
+          src="{{.Url}}"
+          title="No.II Chilled LoFi Jazz"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen
+        ></iframe>
+        <p>{{.Description}}</p>
+      </li>
+      {{end}}
+    </ul>
+
+  {{template "footer.html"}}
