@@ -7,7 +7,7 @@ import (
 )
 
 type VideoController interface {
-	Save(c *gin.Context) entity.Video
+	Save(c *gin.Context) error
 	FindAll() []entity.Video
 }
 
@@ -21,13 +21,15 @@ func New(service service.VideoService) VideoController {
 	}
 }
 
-func (c *controller) Save(ctx *gin.Context) entity.Video {
+func (c *controller) Save(ctx *gin.Context) error {
 	var video entity.Video
-	ctx.BindJSON(&video)
+	if err := ctx.ShouldBindJSON(&video); err != nil {
+		return err
+	}
 
 	c.service.Save(video)
 
-	return video
+	return nil
 }
 
 func (c *controller) FindAll() []entity.Video {
