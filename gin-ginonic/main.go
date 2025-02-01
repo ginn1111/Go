@@ -19,7 +19,7 @@ var (
 	videoController controller.VideoController = controller.New(videoService)
 )
 
-func setupOuputFile() {
+func setupOutputFile() {
 	f, _ := os.Create("gin.log")
 
 	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
@@ -42,7 +42,7 @@ func registerValidators() {
 }
 
 func main() {
-	setupOuputFile()
+	setupOutputFile()
 	registerValidators()
 
 	r := gin.New()
@@ -76,5 +76,11 @@ func main() {
 		})
 	}
 
-	r.Run(":8080") // listen and serve on 0.0.0.0:8080
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		port = "5000"
+	}
+
+	r.Run(":" + port)
 }
