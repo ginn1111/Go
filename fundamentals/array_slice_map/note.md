@@ -129,7 +129,7 @@
 ## 25. More slice manipulations
   - Clone: 
     + `append(s[:0:0], s...)`
-    + `append([]T(nil), s...` if s is blank non-nil, the result is nil
+    + `append([]T(nil), s...)` if s is blank non-nil, the result is nil
     + `sClone := make([]T, len(s)); copy(sClone, s)`
     + `sClone := append(make([]T, 0, len(s)), s...)`
     + In practice: 

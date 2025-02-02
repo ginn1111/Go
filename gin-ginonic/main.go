@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
 	"github.com/go/go-goinc/controller"
+	"github.com/go/go-goinc/entity"
 	"github.com/go/go-goinc/middlewares"
 	"github.com/go/go-goinc/service"
 )
@@ -17,6 +18,10 @@ import (
 var (
 	videoService    service.VideoService       = service.New()
 	videoController controller.VideoController = controller.New(videoService)
+
+	loginService    service.LoginService       = service.NewLoginService()
+	jwtService      service.JWTService         = service.NewJWTService()
+	loginController controller.LoginController = controller.NewLoginController(jwtService, loginService)
 )
 
 func setupOutputFile() {
@@ -47,12 +52,41 @@ func main() {
 
 	r := gin.New()
 
-	r.Use(gin.Recovery(), middlewares.Logger(), middlewares.BasicAuth())
+	r.Use(gin.Recovery(), middlewares.Logger())
 
 	r.Static("/css", "./template/css")
 	r.LoadHTMLGlob("template/*.html")
 
-	apiRoutes := r.Group("/api")
+	r.POST("/login", func(ctx *gin.Context) {
+
+		var credentials entity.Credentials
+
+		err := ctx.ShouldBindJSON(&credentials)
+
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, err)
+		}
+
+		token := loginController.Login(credentials)
+
+		defer func() {
+			err := recover()
+
+			ctx.JSON(http.StatusUnauthorized, err)
+		}()
+
+		if token == "" {
+			ctx.JSON(http.StatusUnauthorized, "")
+
+			return
+		}
+
+		ctx.JSON(http.StatusOK, gin.H{
+			"token": token,
+		})
+	})
+
+	apiRoutes := r.Group("/api", middlewares.JWTAuth())
 	{
 
 		apiRoutes.GET("/videos", func(ctx *gin.Context) {
@@ -79,7 +113,7 @@ func main() {
 	port := os.Getenv("PORT")
 
 	if port == "" {
-		port = "5000"
+		port = "8080"
 	}
 
 	r.Run(":" + port)
