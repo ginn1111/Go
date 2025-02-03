@@ -14,6 +14,12 @@ func JWTAuth() gin.HandlerFunc {
 		const AUTH_SCHEMA = "Bearer "
 		authHeader := ctx.GetHeader("Authorization")
 
+		if authHeader == "" {
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"message": "Not Authorized",
+			})
+		}
+
 		jwtToken := authHeader[len(AUTH_SCHEMA):]
 
 		jwtService := service.NewJWTService()

@@ -12,11 +12,13 @@ import (
 	"github.com/go/go-goinc/controller"
 	"github.com/go/go-goinc/entity"
 	"github.com/go/go-goinc/middlewares"
+	"github.com/go/go-goinc/repository"
 	"github.com/go/go-goinc/service"
 )
 
 var (
-	videoService    service.VideoService       = service.New()
+	videoRepository repository.VideoRepository = repository.NewVideoRepository()
+	videoService    service.VideoService       = service.New(videoRepository)
 	videoController controller.VideoController = controller.New(videoService)
 
 	loginService    service.LoginService       = service.NewLoginService()
@@ -50,9 +52,9 @@ func main() {
 	setupOutputFile()
 	registerValidators()
 
-	r := gin.New()
+	defer videoRepository.Close()
 
-	r.Use(gin.Recovery(), middlewares.Logger())
+	r := gin.Default()
 
 	r.Static("/css", "./template/css")
 	r.LoadHTMLGlob("template/*.html")
@@ -97,8 +99,31 @@ func main() {
 			if err := videoController.Save(ctx); err != nil {
 				ctx.JSON(http.StatusBadRequest, err.Error())
 			} else {
+				ctx.JSON(http.StatusOK, gin.H{
+					"message": "ok",
+				})
+			}
+		})
 
-				ctx.JSON(http.StatusOK, videoController.Save(ctx))
+		apiRoutes.PUT("/video/:id", func(ctx *gin.Context) {
+			if err := videoController.Update(ctx); err != nil {
+				ctx.JSON(http.StatusBadRequest, err.Error())
+			} else {
+
+				ctx.JSON(http.StatusOK, gin.H{
+					"message": "ok",
+				})
+			}
+		})
+
+		apiRoutes.DELETE("/video/:id", func(ctx *gin.Context) {
+			if err := videoController.Delete(ctx); err != nil {
+				ctx.JSON(http.StatusBadRequest, err.Error())
+			} else {
+
+				ctx.JSON(http.StatusOK, gin.H{
+					"message": "ok",
+				})
 			}
 		})
 	}
