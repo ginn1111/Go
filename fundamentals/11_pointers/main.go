@@ -14,9 +14,13 @@ func main() {
 	var t MyInt = 1
 	var t3 Ta
 	var t4 *MyInt = &t
+	var t5 *int
+
+	t5 = (*int)(t4)
 
 	Println(t3)
 	Println(t3 == (*int)(t4), t3 == nil)
 	Println(Tb(t4))
+	Println(t5)
 
 }

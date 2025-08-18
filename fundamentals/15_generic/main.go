@@ -5,6 +5,29 @@ import (
 	"math"
 )
 
+type StrictlyComparableStruct struct {
+	data int
+}
+
+type ComparableStruct struct {
+	data any
+}
+
+func StrictlyComparableFunc() {
+	scs := StrictlyComparableStruct{1}
+	cs := ComparableStruct{"s"}
+
+	fmt.Println(scs.data == cs.data)
+}
+
+type Generic[T any] struct {
+	data T
+}
+
+func (g *Generic[T]) SetData(d T) {
+	g.data = d
+}
+
 type Node[T any] struct {
 	left  *Node[T]
 	right *Node[T]

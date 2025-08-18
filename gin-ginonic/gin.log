@@ -1,3 +1,5 @@
+[GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
+
 [GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
  - using env:	export GIN_MODE=release
  - using code:	gin.SetMode(gin.ReleaseMode)
@@ -5,18 +7,21 @@
 [GIN-debug] GET    /css/*filepath            --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (3 handlers)
 [GIN-debug] HEAD   /css/*filepath            --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (3 handlers)
 [GIN-debug] Loaded HTML Templates (4): 
-	- index.html
 	- 
 	- footer.html
 	- header.html
+	- index.html
 
 [GIN-debug] POST   /login                    --> main.main.func1 (3 handlers)
 [GIN-debug] GET    /api/videos               --> main.main.func2 (4 handlers)
 [GIN-debug] POST   /api/video                --> main.main.func3 (4 handlers)
-[GIN-debug] GET    /view/videos              --> main.main.func4 (3 handlers)
+[GIN-debug] PUT    /api/video/:id            --> main.main.func4 (4 handlers)
+[GIN-debug] DELETE /api/video/:id            --> main.main.func5 (4 handlers)
+[GIN-debug] GET    /view/videos              --> main.main.func6 (3 handlers)
 [GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
 Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
 [GIN-debug] Listening and serving HTTP on :8080
-::1 - [200] [GET]:/view/videos 660.75µs 
-::1 - [401] [POST]:/api/video 199.792µs 
-::1 - [200] [POST]:/api/video 1.219708ms 
+[GIN] 2025/02/03 - 17:08:01 | 200 |    3.844083ms |             ::1 | PUT      "/api/video/1"
+[GIN] 2025/02/03 - 17:08:05 | 200 |       894.5µs |             ::1 | GET      "/api/videos"
+[GIN] 2025/02/03 - 17:08:17 | 200 |    1.419167ms |             ::1 | DELETE   "/api/video/1"
+[GIN] 2025/02/03 - 17:08:20 | 200 |     386.416µs |             ::1 | GET      "/api/videos"
