@@ -7,6 +7,10 @@ import (
 	"os"
 )
 
+type error interface {
+	Error() string
+}
+
 type Error1 struct {
 	text string
 }
