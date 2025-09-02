@@ -1,9 +1,14 @@
 package main
 
 import (
-	"example/standard_libs/myio"
+	"example/standard_libs/myflag"
 )
 
 func main() {
-	myio.MYIO()
+	// myio.MYIO()
+	// myflag.MyFlag()
+
+	// myflag.CloneHead()
+
+	myflag.SubCommand()
 }
